@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,7 +20,7 @@ def create_driver():
     chrome_options = Options()
     chrome_options.add_experimental_option("detach", True)
     chrome_options.add_argument("--log-level=3");
-    driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.implicitly_wait(5)
     #Uncomment below if you want to automatically position the window somewhere and change its size
     #driver.set_window_position(111, 1075, windowHandle='current')
@@ -64,10 +65,6 @@ def get_my_db(config_database):
 	)
 	return my_db
 
-def get_db_prefix():
-	db_prefix = 'wp_'
-	return db_prefix
-
 def calculate_longest_output(message):
 	global longest_output
 	if len(message) > longest_output:
@@ -97,14 +94,14 @@ def scroll_to_top():
 
 
 def test_passed():
-	ok_text = '[%sOK%s]' % ( fg.green, fg.rs)
+	ok_text = ' [%sOK%s]' % ( fg.green, fg.rs)
 	print(f"{ok_text : >20}")
 
 
 def test_not_passed(message=''):
 	if message != '':
 		message = ' - (%s)' % message
-	error_text = '[%serror%s] %s' % (fg.red, fg.rs, message)
+	error_text = ' [%serror%s] %s' % (fg.red, fg.rs, message)
 	print(f"{error_text : >20}")
 
 
@@ -112,7 +109,7 @@ def random_string(chars=5):
 	return str(''.join(random.choices(string.ascii_uppercase + string.digits, k=chars)))
 
 def login(username, password):
-	global driver
+	global driver, config
 	wait_until_load()
 	send_message('Log in')
 	try:
@@ -248,3 +245,14 @@ def delete_dt_field_customizations():
 	my_db.commit()
 	print(' - [DT Field Customizations deleted successfully]')
 ### DATABASE FUNCTIONS - END ###
+
+
+
+driver = create_driver()
+config = load_config()
+longest_output = int(config['DEFAULT']['longest_output'])
+driver.get(config['DEFAULT']['url'])
+login(config['DEFAULT']['wp_user'], config['DEFAULT']['wp_pass'])
+wait_until_load()
+
+#driver.close()
