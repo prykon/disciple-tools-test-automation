@@ -22,9 +22,11 @@ def create_driver():
     chrome_options.add_argument("--log-level=3");
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.implicitly_wait(5)
+    
     #Uncomment below if you want to automatically position the window somewhere and change its size
-    #driver.set_window_position(111, 1075, windowHandle='current')
-    #driver.set_window_size(1440, 875, windowHandle='current')
+    #driver.set_window_position(241, -979, windowHandle='current')
+    # driver.set_window_size(1050, 957, windowHandle='current')
+    #driver.maximize_window()
     return driver
 
 def load_config():
@@ -85,6 +87,9 @@ def get_space_chars(message):
 def bolded(message):
 	return '\033[1m%s\033[0m' % message
 
+def highlight(text):
+	return fg.white + text + fg.rs
+
 def wait_until_load():
 	global driver
 	WebDriverWait(driver, 10).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
@@ -121,11 +126,11 @@ def login(username, password):
 		test_not_passed('Login failed; shutting down.')
 		exit()
 
-def send_message(message, indent=False):
+def send_message(message, indent=0):
 	global longest_output
 	indentation = ' - '
-	if indent == True:
-		indentation = '   └ '
+	if indent > 0:
+		indentation = '\t' * indent + '└ '
 	message = indentation + message
 	space_chars = get_space_chars(message)
 	output = message + ' ' * space_chars
@@ -137,7 +142,7 @@ def refresh_page():
 	print('*** Page refreshed ***')
 
 
-def test_click(message, xpath, indent=False):
+def test_click(message, xpath, indent=0):
 	send_message(message, indent)
 	try:
 		WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -146,7 +151,7 @@ def test_click(message, xpath, indent=False):
 	except:
 		test_not_passed()
 
-def test_click_random_from(message, xpath, indent=False):
+def test_click_random_from(message, xpath, indent=0):
 	send_message(message, indent)
 	try:
 		WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -158,7 +163,19 @@ def test_click_random_from(message, xpath, indent=False):
 	except:
 		test_not_passed()
 
-def test_send_keys(message, xpath, keys, indent=False):
+def test_visibility(message, xpath, indent=0):
+	send_message(message, indent)
+	try:
+		WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, xpath)))
+		element = driver.find_element(By.XPATH, xpath)
+		if element.is_displayed():
+			test_passed()
+		else:
+			test_not_passed()
+	except:
+		test_not_passed('Could not verify visibility')
+
+def test_send_keys(message, xpath, keys, indent=0):
 	wait_until_load()
 	send_message(message, indent)
 	try:
@@ -168,7 +185,7 @@ def test_send_keys(message, xpath, keys, indent=False):
 		print(xpath)
 		test_not_passed()
 
-def test_element_present(message, xpath, indent=False):
+def test_element_present(message, xpath, indent=0):
 	send_message(message, indent)
 	try:
 		time.sleep(1)
@@ -177,7 +194,7 @@ def test_element_present(message, xpath, indent=False):
 	except:
 		test_not_passed()
 
-def test_element_not_present(message, xpath, indent=False):
+def test_element_not_present(message, xpath, indent=0):
 	send_message(message, indent)
 	try:
 		time.sleep(1)
@@ -186,14 +203,14 @@ def test_element_not_present(message, xpath, indent=False):
 	except:
 		test_passed()
 
-def test_checkbox_checked(message, xpath, indent=False):
+def test_checkbox_checked(message, xpath, indent=0):
 	send_message(message, indent)
 	if driver.find_element(By.XPATH, xpath).is_selected():
 		test_passed()
 	else:
 		test_not_passed()
 
-def test_element_attribute_matches(message, xpath, attribute, needle, indent=False):
+def test_element_attribute_matches(message, xpath, attribute, needle, indent=0):
 	send_message(message, indent)
 	try:
 		element = driver.find_element(By.XPATH, xpath)
@@ -202,7 +219,7 @@ def test_element_attribute_matches(message, xpath, attribute, needle, indent=Fal
 	except:
 		return False
 
-def go_to_contacts_page(indent=False):
+def go_to_contacts_page(indent=0):
 	send_message('Go to contacts page', True)
 	try:
 		global hostname
@@ -212,8 +229,8 @@ def go_to_contacts_page(indent=False):
 	except:
 		test_not_passed()
 
-def select_random_contact_from_contacts_page(indent=False):
-	send_message('Select random contact from contacts page', True)
+def select_random_contact_from_contacts_page(indent=0):
+	send_message('Select random contact from contacts page', indent)
 	try:	
 		global driver
 		contact_links_object = driver.find_elements(By.XPATH, "//tr[@class='dnd-moved']")
@@ -233,7 +250,34 @@ def get_post_type():
 def get_post_type_from_wp_admin():
 	return driver.execute_script('return window.field_settings.post_type;')
 
+def test_expand_tile_menu(menu_id, indent=0):
+	send_message("Testing %s tile menu expansion" % (highlight(menu_id)), indent)
+	try:
+		time.sleep(1)
+		test_click("Test %s tile menu expand" % (highlight(t)), "//div[contains(@class, 'field-settings-table-tile-name') and @data-key='%s']" % menu_id, True)
+		test_passed()
+	except:
+		test_not_passed()
 
+	try:
+		time.sleep(1)
+		test_visibility( "Test %s tile submenu visibility" % (highlight(t)), "//div[contains(@class, 'tile-rundown-elements') and @data-parent-tile-key='%s']" % menu_id, True)
+		test_passed()
+	except:
+		test_not_passed()
+
+def get_all_field_types():
+	global driver
+	all_field_types = []
+	driver.find_element(By.XPATH, "//div[contains(@class, 'field-settings-table-tile-name')]").click()
+	driver.find_element(By.XPATH, "//span[@class='add-new-field']/a").click()
+	time.sleep(1)
+	field_types = driver.find_elements(By.XPATH, "//select[@name='new-field-type']/option")
+	for ft in field_types:
+		all_field_types.append(ft.get_attribute('value'))
+	driver.find_element(By.XPATH, "//div[@class='dt-admin-modal-box-close-button']").click()
+	driver.find_element(By.XPATH, "//div[contains(@class, 'field-settings-table-tile-name')]").click()
+	return all_field_types
 
 ### DATABASE FUNCTIONS - START ###	
 def delete_dt_field_customizations():
@@ -247,6 +291,10 @@ def delete_dt_field_customizations():
 ### DATABASE FUNCTIONS - END ###
 
 
+# ==================================== #
+#   START CUSTOM TESTING FUNCTIONS     #
+# ==================================== #
+
 
 driver = create_driver()
 config = load_config()
@@ -254,5 +302,4 @@ longest_output = int(config['DEFAULT']['longest_output'])
 driver.get(config['DEFAULT']['url'])
 login(config['DEFAULT']['wp_user'], config['DEFAULT']['wp_pass'])
 wait_until_load()
-
 #driver.close()
