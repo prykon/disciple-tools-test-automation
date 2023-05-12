@@ -1,6 +1,6 @@
-# Automated Web Testing Script
+# Disciple.Tools Test Automation
 
-This is a Python script that utilizes the Selenium WebDriver library to automate web browser interactions and perform tests on a the Disciple.Tools WordPress theme. The script includes several custom functions for specific testing scenarios.
+This is a Python script that utilizes the Selenium WebDriver library to automate web browser interactions and perform tests on a the [Disciple.Tools WordPress theme](https://github.com/DiscipleTools/disciple-tools-theme). The script includes several custom functions for specific testing scenarios.
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
