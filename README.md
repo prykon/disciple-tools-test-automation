@@ -7,7 +7,7 @@ This is a Python script that utilizes the Selenium WebDriver library to automate
 - [Example Usage](#example-usage)
 - [Functions](#functions)
 
-### Prerequisites
+## Prerequisites
 
 - Python 3.x
 - [Selenium WebDriver](https://www.selenium.dev/documentation/en/webdriver/)
@@ -15,7 +15,7 @@ This is a Python script that utilizes the Selenium WebDriver library to automate
 - [MySQL Connector](https://pypi.org/project/mysql-connector-python/)
 - [sty](https://pypi.org/project/sty/)
 
-### Installation
+## Installation
 
 1. Install the required dependencies by running the following command:
 `pip install -r requirements.txt`
@@ -50,10 +50,10 @@ wp_user = admin
 wp_pass = admin
 longest_output = 0
 ```
-### Example Usage
+## Example Usage
 Some common use cases
 *Under Construction*
 
-### Functions
+## Functions
 A detailed explanation of each function.
 *Under Construction*
