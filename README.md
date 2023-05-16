@@ -1,4 +1,5 @@
 # Disciple.Tools Test Automation
+<img width="150" align="right" src="https://raw.githubusercontent.com/prykon/disciple-tools-test-automation/main/logo.png">
 
 This is a Python script that utilizes the Selenium WebDriver library to automate web browser interactions and perform tests on a the [Disciple.Tools WordPress theme](https://github.com/DiscipleTools/disciple-tools-theme). The script includes several custom functions for specific testing scenarios.
 
