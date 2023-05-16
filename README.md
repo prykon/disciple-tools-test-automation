@@ -51,8 +51,11 @@ wp_pass = admin
 longest_output = 0
 ```
 ## Example Usage
-Some common use cases
-*Under Construction*
+In order to run a test, you must follow these steps.
+
+1. Go to the `Test Cases` folder and select the test case you want.
+2. Copy and paste the test case code at the bottom of the `main.py` file, where it says `Start Custom Testing Functions`
+3. Execute your code by running the `main.py` file in a terminal window. The command that executes the code should be something along the lines of `python main.py` after navigating to the folder in the terminal, but this can vary.
 
 ## Functions
 A detailed explanation of each function.
