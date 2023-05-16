@@ -26,7 +26,7 @@ def create_driver():
     #Uncomment below if you want to automatically position the window somewhere and change its size
     #driver.set_window_position(241, -979, windowHandle='current')
     # driver.set_window_size(1050, 957, windowHandle='current')
-    #driver.maximize_window()
+    driver.maximize_window()
     return driver
 
 def load_config():
@@ -244,62 +244,8 @@ def select_random_contact_from_contacts_page(indent=0):
 	except:
 		test_not_passed()
 
-def get_post_type():
-	return driver.execute_script('return window.wpApiShare.post_type;')
-
-def get_post_type_from_wp_admin():
-	return driver.execute_script('return window.field_settings.post_type;')
-
-def test_expand_tile_menu(menu_id, indent=0):
-	send_message("Testing %s tile menu expansion" % (highlight(menu_id)), indent)
-	try:
-		time.sleep(1)
-		test_click("Test %s tile menu expand" % (highlight(t)), "//div[contains(@class, 'field-settings-table-tile-name') and @data-key='%s']" % menu_id, True)
-		test_passed()
-	except:
-		test_not_passed()
-
-	try:
-		time.sleep(1)
-		test_visibility( "Test %s tile submenu visibility" % (highlight(t)), "//div[contains(@class, 'tile-rundown-elements') and @data-parent-tile-key='%s']" % menu_id, True)
-		test_passed()
-	except:
-		test_not_passed()
-
-def get_all_field_types():
-	global driver
-	all_field_types = []
-	driver.find_element(By.XPATH, "//div[contains(@class, 'field-settings-table-tile-name')]").click()
-	driver.find_element(By.XPATH, "//span[@class='add-new-field']/a").click()
-	time.sleep(1)
-	field_types = driver.find_elements(By.XPATH, "//select[@name='new-field-type']/option")
-	for ft in field_types:
-		all_field_types.append(ft.get_attribute('value'))
-	driver.find_element(By.XPATH, "//div[@class='dt-admin-modal-box-close-button']").click()
-	driver.find_element(By.XPATH, "//div[contains(@class, 'field-settings-table-tile-name')]").click()
-	return all_field_types
-
-### DATABASE FUNCTIONS - START ###	
-def delete_dt_field_customizations():
-	global config
-	my_db = get_my_db(config['DATABASE'])
-	my_cursor = my_db.cursor()
-	db_prefix = get_db_prefix()
-	my_cursor.execute("DELETE FROM `%soptions` WHERE option_name = 'dt_field_customizations';" % db_prefix)
-	my_db.commit()
-	print(' - [DT Field Customizations deleted successfully]')
-### DATABASE FUNCTIONS - END ###
-
-
 # ==================================== #
 #   START CUSTOM TESTING FUNCTIONS     #
 # ==================================== #
 
 
-driver = create_driver()
-config = load_config()
-longest_output = int(config['DEFAULT']['longest_output'])
-driver.get(config['DEFAULT']['url'])
-login(config['DEFAULT']['wp_user'], config['DEFAULT']['wp_pass'])
-wait_until_load()
-#driver.close()
