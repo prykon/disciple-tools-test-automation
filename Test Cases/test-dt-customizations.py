@@ -68,7 +68,7 @@ for t in tiles:
 		time.sleep(1)
 		random_field_name = 'Random %s field %s' % (aft, random_string())
 		random_field_key = random_field_name.replace(' ', '_').lower()
-		test_send_keys("Write %s in input box" % highlight('new field name'), '//input[@name="edit-tile-label"]', random_field_name, 2)
+		test_send_keys("Write %s in input box" % highlight('new field name'), '//input[@name="new-field-name"]', random_field_name, 2)
 		time.sleep(1)
 		send_message("Select %s from field type dropdown" % (highlight(aft)), 2)
 		field_type_dropdown = Select(driver.find_element(By.XPATH, '//select[@name="new-field-type"]'))
@@ -81,7 +81,6 @@ for t in tiles:
 		# Test name field is editable
 		send_message("Test %s field is editable\n" % highlight(random_field_name), 1)
 		test_click("Test click edit icon", '//div[contains(@class, "field-settings-table-field-name") and @data-key="%s"]/span[@class="edit-icon"]' % (random_field_key), 1)
-		#print('//div[contains(@class, "field-settings-table-field-name") and @data-key="%s"]/span[@class="edit-icon"]' % random_field_key)
 		time.sleep(1)
 		test_visibility("Testing if edit modal opened correctly.", '//div[contains(@class, "dt-admin-modal-box")]', 1)
 		random_field_name_new = random_field_name + ' edited'
@@ -99,7 +98,6 @@ for t in tiles:
 		except:
 			test_not_passed()
 		
-
 	# Test expanding each field menu
 	for fk, fv in fields.items():
 		if 'tile' in fv and fv['tile'] == t and 'default' in fv and fv['default']:
