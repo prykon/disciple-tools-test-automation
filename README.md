@@ -58,6 +58,9 @@ In order to run a test, you must follow these steps.
 2. Copy and paste the test case code at the bottom of the `main.py` file, where it says `Start Custom Testing Functions`
 3. Execute your code by running the `main.py` file in a terminal window. The command that executes the code should be something along the lines of `python main.py` after navigating to the folder in the terminal, but this can vary.
 
+## Preview
+https://github.com/prykon/disciple-tools-test-automation/assets/36511666/a28864b8-20c2-426b-9c74-8444ab10daf2
+
 ## Functions
 A detailed explanation of each function.
 *Under Construction*
