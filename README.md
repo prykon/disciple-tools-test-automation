@@ -59,7 +59,7 @@ In order to run a test, you must follow these steps.
 3. Execute your code by running the `main.py` file in a terminal window. The command that executes the code should be something along the lines of `python main.py` after navigating to the folder in the terminal, but this can vary.
 
 ## Preview
-https://github.com/prykon/disciple-tools-test-automation/assets/36511666/a28864b8-20c2-426b-9c74-8444ab10daf2
+https://github.com/prykon/disciple-tools-test-automation/assets/36511666/74206d25-4452-4831-9bd7-ff635ce54bdf
 
 ## Functions
 A detailed explanation of each function.
